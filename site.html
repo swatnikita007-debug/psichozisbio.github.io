@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MFE - client</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+
+  body, html {
+    height: 100%;
+    background-color: #000000;
+    font-family: 'Poppins', sans-serif;
+    color: #e1e1e6;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    user-select: none;
+  }
+
+  .logo-lang {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+  }
+
+  .lang-select {
+    color: #a1a1aa;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .lang-select img {
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+    user-select: none;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    font-size: 14px;
+    color: #a1a1aa;
+    user-select: none;
+  }
+
+  nav a, nav span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #a1a1aa;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  nav a:hover, nav span:hover {
+    color: #4f7cff;
+  }
+
+  button.btn-auth {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+  }
+
+  button.btn-auth:hover {
+    background-color: #1e40af;
+  }
+
+  main {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 60px 6%;
+    min-height: 85vh;
+    gap: 20px;
+    flex-wrap: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  main > section.left {
+    max-width: 540px;
+  }
+
+  main h1 {
+    font-weight: 700;
+    font-size: 38px;
+    margin-bottom: 16px;
+    color: #f1f1f3;
+    user-select: none;
+  }
+
+  main p {
+    font-size: 17px;
+    line-height: 1.5;
+    margin-bottom: 35px;
+    color: #bbc0cf;
+    user-select: none;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  button.btn-buy {
+    background-color: #2563eb;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+
+  button.btn-buy:hover {
+    background-color: #1e40af;
+  }
+
+  button.btn-details {
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: 2px solid #3a3a60;
+    background-color: transparent;
+    color: #a3a5b5;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+
+  button.btn-details:hover {
+    border-color: #4f7cff;
+    color: #4f7cff;
+  }
+
+  button svg {
+    stroke-width: 2;
+  }
+
+  #backgroundCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background-color: black;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-lang">
+    <div class="logo">M3FF - client </div>
+    <div class="lang-select" title="Выбрать язык">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_Russian_Federation.svg/1200px-Flag_of_the_Russian_Federation.svg.png" alt="RU" />
+      <span>RU</span>
+    </div>
+</header>
+
+<main>
+  <section class="left">
+    <h1>Лучший бесплатный клиент для комфортной игры</h1>
+    <p>Мы предоставляем вам худший клиент для не комфортной игры.</p>
+    <div class="btn-group">
+      <button class="btn-buy" title="Купить">Купить</button>
+      <button class="btn-details" title="Подробнее">Подробнее</button>
+    </div>
+  </section>
+</main>
+ <style>
+  /* Фон затемнения */
+  #modalOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  /* Анимация появления */
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  /* Модальное окно */
+  #modal {
+    background: #1e1e2f;
+    border-radius: 16px;
+    padding: 30px 35px;
+    width: 360px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    color: #f0f0f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transform: translateY(-30px);
+    opacity: 0;
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  @keyframes slideIn {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Заголовок */
+  #modal h2 {
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.6rem;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+
+  /* Список опций */
+  .product-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2a2a44;
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: background 0.25s;
+    user-select: none;
+  }
+  .product-option:hover {
+    background: #3f3f61;
+  }
+
+  /* Радио-кнопка */
+  .product-option input[type="radio"] {
+    accent-color: #4f93ff;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Название и цена */
+  .product-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 10px;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #cbd5e1;
+  }
+  .price {
+    font-weight: 700;
+    color: #4f93ff;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* Кнопки */
+  #modalButtons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #buyConfirm {
+    background: linear-gradient(45deg, #4f93ff, #1e67e2);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 14px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 12px #3c6cd1cc;
+    transition: background 0.3s ease;
+  }
+  #buyConfirm:hover {
+    background: linear-gradient(45deg, #1e67e2, #3a4fcb);
+  }
+
+  #buyCancel {
+    background: transparent;
+    border: 2px solid #57608a;
+    color: #8e96b2;
+    padding: 12px 26px;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  #buyCancel:hover {
+    color: #4f93ff;
+    border-color: #4f93ff;
+  }
+</style>
+
+<div id="modalOverlay">
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Выберите товар</h2>
+    <label class="product-option">
+      <input type="radio" name="product" value="Навсегда - 0$" />
+      <div class="product-info">
+        <span>Навсегда</span>
+        <span class="price">0$</span>
+      </div>
+    </label>
+    <div id="modalButtons">
+      <button id="buyConfirm" type="button">Купить</button>
+      <button id="buyCancel" type="button">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const buyBtn = document.querySelector('button.btn-buy');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const buyConfirm = document.getElementById('buyConfirm');
+  const buyCancel = document.getElementById('buyCancel');
+
+  buyBtn.addEventListener('click', () => {
+    modalOverlay.style.display = 'flex';
+    // Сброс выбора при открытии
+    const checked = document.querySelector('input[name="product"]:checked');
+    if (checked) checked.checked = false;
+  });
+
+  buyCancel.addEventListener('click', () => {
+    modalOverlay.style.display = 'none';
+  });
+
+  buyConfirm.addEventListener('click', () => {
+    const selected = document.querySelector('input[name="product"]:checked');
+    if (!selected) {
+      alert('Пожалуйста, выберите товар для покупки.');
+      return;
+    }
+    alert(`Вы выбрали:\n${selected.value}\nСпасибо за покупку!`);
+    modalOverlay.style.display = 'none';
+  });
+
+  // Закрывать при клике вне модального окна
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.style.display = 'none';
+    }
+  });
+
+  // Удобство: клик по карточке выбирает радио
+  document.querySelectorAll('.product-option').forEach(label => {
+    label.addEventListener('click', () => {
+      label.querySelector('input[type="radio"]').checked = true;
+    });
+  });
+</script>
+
+<canvas id="backgroundCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('backgroundCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = 2 + Math.random() * 4;
+      this.speedX = (Math.random() - 0.5) * 0.6;
+      this.speedY = (Math.random() - 0.5) * 0.6;
+      this.color = `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`;
+      this.alpha = 0.4 + Math.random() * 0.6;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+
+      if (this.x < -this.size) this.x = width + this.size;
+      else if (this.x > width + this.size) this.x = -this.size;
+      if (this.y < -this.size) this.y = height + this.size;
+      else if (this.y > height + this.size) this.y = -this.size;
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+      // Используем hsl с прозрачностью для градиента
+      gradient.addColorStop(0, `hsla(${this.color.match(/\d+/g)[0]}, 100%, 70%, ${this.alpha})`);
+      gradient.addColorStop(1, `hsla(${this.color.match(/\d+/g)[0]}, 100%, 70%, 0)`);
+      ctx.fillStyle = gradient;
+      ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }
+
+  const particlesCount = 80;
+  const particles = [];
+  for (let i = 0; i < particlesCount; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    particles.forEach(p => {
+      p.update();
+      p.draw(ctx);
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>
